@@ -1,0 +1,43 @@
+---
+import { site, whatsappHref, hasWhatsApp } from '@/content/site';
+const contacts = [
+  hasWhatsApp ? { label: 'WhatsApp', href: whatsappHref(), external: true } : null,
+  site.phone ? { label: 'Phone', value: site.phone, href: `tel:${site.phone.replace(/\s+/g, '')}` } : null,
+  site.email ? { label: 'Email', value: site.email, href: `mailto:${site.email}` } : null,
+].filter(Boolean) as { label: string; value?: string; href: string; external?: boolean }[];
+---
+
+<footer class="site-footer">
+  <div class="container-x site-footer-inner">
+    <div class="footer-brand">
+      <p class="footer-legal">{site.legalName}</p>
+      <p class="meta footer-location">{site.location}</p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      <p class="meta footer-label">Navigate</p>
+      {site.nav.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={site.contactHref}>Contact</a>
+    </nav>
+
+    <div class="footer-contact">
+      <p class="meta footer-label">Contact</p>
+      {
+        contacts.length ? (
+          contacts.map((c) => (
+            <a href={c.href} target={c.external ? '_blank' : undefined} rel={c.external ? 'noopener' : undefined}>
+              {c.label}
+              {c.value && <span class="footer-contact-value">{c.value}</span>}
+            </a>
+          ))
+        ) : (
+          <p class="footer-note">Contact details are configured in <code>.env</code> (see <code>.env.example</code>).</p>
+        )
+      }
+    </div>
+  </div>
+  <div class="container-x footer-bottom">
+    <p class="meta">© {new Date().getFullYear()} {site.legalName}</p>
+    <p class="meta">Cosmic Navigator · Prototype</p>
+  </div>
+</footer>

@@ -1,0 +1,24 @@
+---
+import { reasons } from '@/content/services';
+import { copy } from '@/content/site';
+---
+
+<section class="section why" aria-labelledby="why-title">
+  <div class="container-x">
+    <div class="section-head" data-reveal>
+      <p class="meta section-eyebrow">05 / {copy.why.eyebrow}</p>
+      <h2 class="section-title" id="why-title">{copy.why.headline}</h2>
+    </div>
+    <ul class="why-grid" data-reveal>
+      {
+        reasons.map((r, i) => (
+          <li class="why-item">
+            <p class="meta why-index">{String(i + 1).padStart(2, '0')}</p>
+            <h3 class="why-title">{r.title}</h3>
+            <p class="why-body">{r.body}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

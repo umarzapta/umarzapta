@@ -1,0 +1,18 @@
+---
+import Base from '@/layouts/Base.astro';
+import CosmicNavigator from '@/components/navigator/CosmicNavigator';
+import BusinessJourney from '@/components/sections/BusinessJourney.astro';
+import ServiceExplorer from '@/components/sections/ServiceExplorer';
+import Audiences from '@/components/sections/Audiences.astro';
+import WhyCosmic from '@/components/sections/WhyCosmic.astro';
+import FinalCTA from '@/components/sections/FinalCTA.astro';
+---
+
+<Base>
+  <CosmicNavigator client:load />
+  <BusinessJourney />
+  <ServiceExplorer client:visible />
+  <Audiences />
+  <WhyCosmic />
+  <FinalCTA />
+</Base>

@@ -1,0 +1,24 @@
+---
+import { audiences } from '@/content/services';
+import { copy } from '@/content/site';
+---
+
+<section class="section audiences" id="about" aria-labelledby="audiences-title">
+  <div class="container-x">
+    <div class="section-head" data-reveal>
+      <p class="meta section-eyebrow">04 / {copy.audiences.eyebrow}</p>
+      <h2 class="section-title" id="audiences-title">{copy.audiences.headline}</h2>
+    </div>
+    <ul class="audience-list" data-reveal>
+      {
+        audiences.map((a, i) => (
+          <li class="audience-item">
+            <span class="meta audience-index">{String(i + 1).padStart(2, '0')}</span>
+            <span class="audience-label">{a.label}</span>
+            <span class="audience-note">{a.note}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

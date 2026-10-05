@@ -1,0 +1,160 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS (visual)
+   Scene / motion parameters live in src/config/tokens.ts.
+   Edit values here to art-direct colour, type, spacing and glow.
+------------------------------------------------------------------- */
+@theme {
+  /* Surfaces: charcoal with tonal variation, never absolute black. */
+  --color-bg-0: #0a0b0d;
+  --color-bg-1: #0f1114;
+  --color-bg-2: #15181c;
+  --color-bg-3: #1c2026;
+
+  /* Type */
+  --color-fg: #f3f0ea;
+  --color-fg-muted: #8f939b;
+  --color-fg-subtle: #5f636b;
+
+  /* Lines */
+  --color-line: rgb(255 255 255 / 0.08);
+  --color-line-strong: rgb(255 255 255 / 0.16);
+
+  /* Single restrained accent: warm signal amber. */
+  --color-accent: #e3b36b;
+  --color-accent-dim: #a9834c;
+  --color-accent-soft: rgb(227 179 107 / 0.14);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Type scale */
+  --text-display: clamp(2.5rem, 4.1vw, 4.75rem);
+  --text-display--line-height: 0.96;
+  --text-display--letter-spacing: -0.035em;
+  --text-h2: clamp(2rem, 4.4vw, 3.75rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.03em;
+  --text-h3: clamp(1.5rem, 2.4vw, 2.125rem);
+  --text-h3--line-height: 1.1;
+  --text-h3--letter-spacing: -0.02em;
+  --text-meta: 0.6875rem;
+  --text-meta--line-height: 1;
+  --text-meta--letter-spacing: 0.14em;
+
+  /* Spacing rhythm */
+  --spacing-gutter: clamp(1.25rem, 4vw, 4rem);
+  --spacing-section: clamp(6rem, 12vw, 11rem);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-micro: 200ms;
+  --duration-hover: 280ms;
+  --duration-panel: 480ms;
+  --duration-major: 900ms;
+  --duration-section: 700ms;
+
+  /* Glow */
+  --glow-accent: 0 0 24px rgb(227 179 107 / 0.35);
+  --glow-accent-strong: 0 0 40px rgb(227 179 107 / 0.5);
+}
+
+@layer base {
+  html {
+    background: var(--color-bg-1);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'cv11', 'ss01', 'ss03', 'tnum';
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-bg-0);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  button { cursor: pointer; }
+}
+
+@utility meta {
+  font-size: var(--text-meta);
+  line-height: var(--text-meta--line-height);
+  letter-spacing: var(--text-meta--letter-spacing);
+  text-transform: uppercase;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+@utility container-x {
+  padding-inline: var(--spacing-gutter);
+  margin-inline: auto;
+  max-width: 96rem;
+}
+
+@utility hairline {
+  border-color: var(--color-line);
+}
+
+/* Buttons --------------------------------------------------------- */
+@utility btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 3rem;
+  padding-inline: 1.375rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition:
+    background-color var(--duration-micro) var(--ease-out-quart),
+    color var(--duration-micro) var(--ease-out-quart),
+    border-color var(--duration-micro) var(--ease-out-quart),
+    box-shadow var(--duration-hover) var(--ease-out-quart),
+    transform var(--duration-micro) var(--ease-out-quart);
+}
+@utility btn-primary {
+  background: var(--color-fg);
+  color: var(--color-bg-0);
+  &:hover { background: #ffffff; box-shadow: 0 0 0 1px rgb(255 255 255 / 0.2); }
+  &:active { transform: translateY(1px); }
+}
+@utility btn-accent {
+  background: var(--color-accent);
+  color: var(--color-bg-0);
+  &:hover { box-shadow: var(--glow-accent); }
+  &:active { transform: translateY(1px); }
+}
+@utility btn-ghost {
+  color: var(--color-fg);
+  border: 1px solid var(--color-line-strong);
+  background: transparent;
+  &:hover { border-color: rgb(255 255 255 / 0.32); background: rgb(255 255 255 / 0.03); }
+  &:active { transform: translateY(1px); }
+}
+
+/* Reduced motion: collapse durations, keep opacity transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 180ms !important;
+    scroll-behavior: auto !important;
+  }
+}

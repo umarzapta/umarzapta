@@ -1,0 +1,70 @@
+---
+import { services } from '@/content/services';
+import { copy } from '@/content/site';
+
+// Trajectory that hops between the four stage markers (1200 x 120 viewBox,
+// stretched to the track width). Marker x positions approximate the column
+// starts of the 4-column grid.
+const xs = [0, 308, 615, 923];
+const baseY = 118;
+const peakY = 22;
+const hops = xs.slice(1).map((x1, i) => {
+  const x0 = xs[i];
+  const d = x1 - x0;
+  const xm = x0 + d / 2;
+  return `C ${x0 + d * 0.22} ${baseY}, ${xm - d * 0.18} ${peakY}, ${xm} ${peakY} C ${xm + d * 0.18} ${peakY}, ${x1 - d * 0.22} ${baseY}, ${x1} ${baseY}`;
+});
+const journeyPath = `M ${xs[0]} ${baseY} ${hops.join(' ')}`;
+---
+
+<section class="section journey" id="journey" aria-labelledby="journey-title">
+  <div class="container-x">
+    <div class="section-head" data-reveal>
+      <p class="meta section-eyebrow">02 / Business journey</p>
+      <h2 class="section-title" id="journey-title">{copy.journey.headline}</h2>
+      <p class="section-support">{copy.journey.support}</p>
+    </div>
+
+    <div class="journey-track" data-reveal>
+      <svg class="journey-path" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+        <path class="journey-path-base" d={journeyPath} />
+        <path class="journey-path-draw" d={journeyPath} />
+      </svg>
+      <ol class="journey-stages">
+        {
+          services.map((s) => (
+            <li class="journey-stage">
+              <span class="journey-marker" aria-hidden="true" />
+              <p class="meta journey-index">{s.index}</p>
+              <h3 class="journey-category">{s.category}</h3>
+              <p class="journey-tagline">{s.tagline}</p>
+              <p class="meta journey-service">{s.name}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const path = document.querySelector<SVGPathElement>('.journey-path-draw');
+  const track = document.querySelector<HTMLElement>('.journey-track');
+  if (path && track) {
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = `${len}`;
+    path.style.strokeDashoffset = reduced ? '0' : `${len}`;
+    if (!reduced) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.to(path, {
+        strokeDashoffset: 0,
+        ease: 'none',
+        scrollTrigger: { trigger: track, start: 'top 80%', end: 'bottom 45%', scrub: 0.8 },
+      });
+    }
+  }
+</script>

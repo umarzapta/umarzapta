@@ -1,0 +1,61 @@
+---
+import '@/styles/global.css';
+import '@/styles/sections.css';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import { site } from '@/content/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${site.name} — Where does your business need to go?`,
+  description = 'Accounting, corporate secretary, Singapore grants and SME business loans. Choose a direction and discover how Cosmic can help your business move forward.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="bg-bg-1 text-fg">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0f1114" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Section reveal: adds .is-in once an element enters the viewport.
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const els = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (reduced || !('IntersectionObserver' in window)) {
+        els.forEach((el) => el.classList.add('is-in'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (e.isIntersecting) {
+                (e.target as HTMLElement).classList.add('is-in');
+                io.unobserve(e.target);
+              }
+            }
+          },
+          // The root extends far above the viewport so an element skipped
+          // past during a fast scroll still counts as intersecting.
+          { rootMargin: '10000px 0px -10% 0px', threshold: 0 },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,41 @@
+---
+import { copy, whatsappHref, hasWhatsApp } from '@/content/site';
+import { services } from '@/content/services';
+import { orbit } from '@/config/tokens';
+const rx = orbit.rx * 1000;
+const ry = orbit.ry * 1000;
+const DEG = Math.PI / 180;
+const points = services.map((s) => ({
+  id: s.id,
+  x: 500 + Math.cos(orbit.angles[s.id] * DEG) * rx,
+  y: 500 + Math.sin(orbit.angles[s.id] * DEG) * ry,
+}));
+---
+
+<section class="section final" id="contact" aria-labelledby="final-title">
+  <div class="container-x final-inner">
+    <div class="final-copy" data-reveal>
+      <p class="meta section-eyebrow">06 / Next step</p>
+      <h2 class="section-title final-title" id="final-title">{copy.finalCta.headline}</h2>
+      <p class="section-support final-support">{copy.finalCta.support}</p>
+      <div class="final-ctas">
+        <a class="btn btn-accent" href={whatsappHref()} target={hasWhatsApp ? '_blank' : undefined} rel="noopener">
+          {copy.finalCta.primary}
+        </a>
+        <a class="btn btn-ghost" href="#services">{copy.finalCta.secondary}</a>
+      </div>
+    </div>
+
+    <div class="final-orbit" data-reveal aria-hidden="true">
+      <svg viewBox="0 0 1000 1000">
+        <g class="final-orbit-spin">
+          <ellipse cx="500" cy="500" rx={rx} ry={ry} class="final-ring" />
+          <ellipse cx="500" cy="500" rx={rx * 1.04} ry={ry * 0.56} transform="rotate(-14 500 500)" class="final-ring final-ring-2" />
+          {points.map((p) => <circle cx={p.x} cy={p.y} r="7" class="final-node" />)}
+        </g>
+        <circle cx="500" cy="500" r="54" class="final-core" />
+        <circle cx="500" cy="500" r="120" class="final-core-halo" />
+      </svg>
+    </div>
+  </div>
+</section>
